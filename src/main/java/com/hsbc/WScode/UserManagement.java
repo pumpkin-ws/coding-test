@@ -28,46 +28,63 @@ public class UserManagement {
     private static final String TOKEN_SEPARATOR = ":-:";
 
     /**
-     * This function will create a user and store in the user-password hashmap
+     * Create a user and store in the user-password hashmap
      * @param user_name
      * @param password
      * @return
      */
     public static boolean createUser(String user_name, String password) {
-        System.out.println("A new user has been created.");
         // check if user exists, if user exists, then add user and password
         if (m_user_password.containsKey(user_name)) {
             // if the same user name exists, return false
             return false;
         } else {
             m_user_password.put(user_name, password);
+            System.out.println("Size of the user password hashmap is now: " + m_user_password.size());
             return true;
         }
     }
 
     /**
-     * This function will identify if user exists in user-password hashmap, if exsit,
-     * @param user_name
-     * @return
+     * Identify if the username exists in user-password hashmap, if it does, remove user, else do nothing
+     * @param username
+     * @return true if user is removed successfully
      */
-    public static boolean deleteUser(String user_name) {
-        if (m_user_password.containsKey(user_name)) {
-            m_user_password.remove(user_name);
+    public static boolean deleteUser(String username) {
+        if (m_user_password.containsKey(username)) {
+            m_user_password.remove(username);
+            System.out.println("Size of the user password hashmap is now: " + m_user_password.size());
             return true;
         } else {
+            System.out.println("The username is not created");
             return false;
         }
     }
-    //    public static boolean create
+
+    /**
+     *
+     * @param role
+     * @return
+     */
     public static boolean createRole(String role) {
         if (m_role.contains(role) == true) {
             return false;
         } else {
             m_role.add(role);
+            m_role_user.put(role, new HashSet<String>());
+            System.out.println("Number of role: " + m_role.size());
+            System.out.println("Number of role-user: " + m_role_user.size());
+            System.out.println("---------------------------------------------");
             return true;
         }
 
     }
+
+    /**
+     *
+     * @param role
+     * @return
+     */
     public static boolean deleteRole(String role) {
         if (m_role.contains(role) == false) {
             System.out.println("The role is not in the list, will not perform insertion");
@@ -76,10 +93,20 @@ public class UserManagement {
             m_role.remove(role);
             // if a role is deleted, then roles in the user-role pair should be removed as well
             m_role_user.remove(role);
+
+            System.out.println("Number of role: " + m_role.size());
+            System.out.println("Number of role-user: " + m_role_user.size());
+            System.out.println("---------------------------------------------");
             return true;
         }
     }
 
+    /**
+     *
+     * @param user
+     * @param role
+     * @return
+     */
     public static boolean assignRole2User(String user, String role) {
         // need to first check if user exists
         if (m_user_password.containsKey(user) == false) {
@@ -89,6 +116,7 @@ public class UserManagement {
             // check if the role is a valid role
             if (m_role.contains(role) == true) {
                 m_role_user.get(role).add(user); // add user to the role TODO: need to check get and add
+                System.out.println(role + ":" + m_role_user.get(role));
                 return true;
             } else {
                 System.out.println("Role is not created yet. Create role first then user can be assigned.");

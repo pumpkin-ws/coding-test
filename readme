@@ -1,3 +1,5 @@
 The main source codes for this project are put in package com.hsbc.WScode.
+Maven used as build manager.
+
 Two classes are created:
-    - StringEncryption contains methods to encrpty and decrypt strings based on AES (Advanced Encryption Standard)
+    - StringEncryption contains methods to encrpty and decrypt strings using AES (Advanced Encryption Standard)

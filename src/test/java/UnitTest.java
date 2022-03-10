@@ -1,6 +1,6 @@
 import com.hsbc.WScode.UserManagement;
-import org.junit.Assert;
 import org.junit.Test;
+import junit.framework.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -11,10 +11,49 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Array;
 import java.util.*;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+
 public class UnitTest {
+    @Test
+    public void createDeleteUser() {
+        assertTrue("assertion should fail", UserManagement.createUser("Wilson", "123456"));
+        assertFalse(UserManagement.createUser("Wilson", "123456"));
+        assertTrue(UserManagement.createUser("Tom", "123456"));
+        assertTrue(UserManagement.createUser("Tanya", "123456"));
+        assertTrue(UserManagement.createUser("Alice", "123456"));
+        assertTrue(UserManagement.deleteUser("Alice"));
+        assertFalse(UserManagement.deleteUser("Alice"));
+    }
 
-    public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    @Test
+    public void createDeleteRole() {
+        assertTrue(UserManagement.createRole("admin"));
+        assertTrue(UserManagement.createRole("visitor"));
+        assertFalse(UserManagement.createRole("admin"));
+        assertTrue(UserManagement.deleteRole("admin"));
+        assertFalse(UserManagement.deleteRole("admin"));
+        assertTrue(UserManagement.deleteRole("visitor"));
+        assertFalse(UserManagement.deleteRole("abc"));
+    }
 
+    @Test
+    public void addRole2User() {
+        assertTrue(UserManagement.createUser("Wilson", "123456"));
+        assertTrue(UserManagement.createUser("Tom", "123456"));
+        assertTrue(UserManagement.createUser("Tanya", "123456"));
+        assertTrue(UserManagement.createUser("Alice", "123456"));
+        assertTrue(UserManagement.createRole("admin"));
+        assertTrue(UserManagement.createRole("visitor"));
+        assertTrue(UserManagement.assignRole2User("Wilson", "admin"));
+        // Nothing happens with mutilple assignment
+        assertTrue(UserManagement.assignRole2User("Wilson", "admin"));
+        assertTrue(UserManagement.assignRole2User("Wilson", "admin"));
+        assertTrue(UserManagement.assignRole2User("Wilson", "visitor"));
+        assertTrue(UserManagement.assignRole2User("Tanya", "visitor"));
+        assertTrue(UserManagement.assignRole2User("Tom", "admin"));
+        assertFalse(UserManagement.assignRole2User("Jason", "admin"));
+        assertFalse(UserManagement.assignRole2User("Jason", "admin"));
 
     }
 
